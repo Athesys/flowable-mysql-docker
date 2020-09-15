@@ -1,0 +1,27 @@
+version: '3.4'
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: flowable
+      MYSQL_DATABASE: flowable
+      MYSQL_USER: flowable
+      MYSQL_PASSWORD: flowable
+    hostname: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+  flowable:
+    image: flowable/all-in-one
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    volumes:
+      - ./application.properties:/opt/tomcat/lib/application.properties
+      - ./mysql-connector-java-8.0.21.jar:/opt/tomcat/lib/mysql-connector-java-8.0.21.jar
+volumes:
+  mysql-data:
+    external: 
+      name: mysql-data
